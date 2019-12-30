@@ -26,7 +26,9 @@ class Export(object):
         table_entries = ["Intention", "Command", "Msg Id"]
 
         for translation in translations:
+            intent = translation.occurrences[0][0] + ":" + translation.occurrences[0][1]
+
             # print(translation.msgid, translation.msgstr)
-            table_entries.extend(["Unknown", translation.msgstr, translation.msgid])
+            table_entries.extend([intent, translation.msgstr, translation.msgid])
 
         md_file.new_table(columns=3, rows=len(translations) + 1, text=table_entries, text_align='left')
