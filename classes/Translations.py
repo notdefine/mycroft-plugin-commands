@@ -8,7 +8,7 @@ import os
 
 class Translations(object):
     lang = "de"
-    EXTRACT_DIR = "extract"
+    EXTRACT_DIR = "../extract"
 
     def __init__(self, lang):
         self.lang = lang
@@ -26,12 +26,19 @@ class Translations(object):
 
     # get all mycroft PO files from skills
     def load_po_files(self):
+        consolidated_commands = {}
+
         directory_with_po_files = self.EXTRACT_DIR + "/" + self.lang + '-mycroft-skills/' + self.lang + '/mycroft-skills/'
         print('Read po files from directory ' + directory_with_po_files)
         for file in glob.glob(directory_with_po_files + "*.po"):
-            print('Read commands from plugin: ' + basename(file)[0:-3])
+            plugin_name = basename(file)[0:-3]
+            consolidated_commands[plugin_name] = []
+            print('Read commands from plugin: ' + plugin_name)
             po = polib.pofile(
                 file
             )
-            for entry in po:
-                print(entry.msgid, entry.msgstr)
+            for po_entry in po:
+                # print(po_entry.msgid, po_entry.msgstr)
+                consolidated_commands[plugin_name].append(po_entry)
+
+        return consolidated_commands
